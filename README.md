@@ -5,8 +5,8 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Estoda/AI-Chat-System-API.git
-   cd AI_chat
+   git clone https://github.com/Estoda/SWE_Project.git
+   cd ShoppingWebsite
 
    ```
 
@@ -52,8 +52,8 @@
 
 1. http://127.0.0.1:8000/register/ - Register a new user
 2. http://127.0.0.1:8000/login/ - Log in and get an authentication token
-3. http://127.0.0.1:8000/tokens/ - Get the user's remaining tokens
-4. http://127.0.0.1:8000/chat/ - Send a message and get an AI-generated response
+<!-- 3. http://127.0.0.1:8000/tokens/ - Get the user's remaining tokens
+3. http://127.0.0.1:8000/chat/ - Send a message and get an AI-generated response -->
 
 ## Dependencies
 
@@ -65,6 +65,7 @@
 
 ## Example Input/Output:
 
+<!--
 - POST /register/:
 
   - Input:
@@ -131,4 +132,4 @@
       "timestamp": "2024-11-11T13:29:59.216847Z",
       "remaining_tokens": 3900
     }
-    ```
+    ``` -->
