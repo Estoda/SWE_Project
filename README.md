@@ -1,4 +1,4 @@
-# AI Chat System API
+# Shopping Website API
 
 ## Installation Instructions
 
