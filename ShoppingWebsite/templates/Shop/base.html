@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="{% static 'css/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
@@ -21,17 +25,12 @@
       </a>
       <nav>
         <ul>
+          {% if username %}
           <li>
-            <a href="{% url 'register' %}">Register</a>
-          </li>
-          <li>
-            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'logout' %}">Logout</a>
           </li>
           <li>
             <a href="{% url 'products' %}">Products</a>
-          </li>
-          <li>
-            <a href="{% url 'add_product' %}">Add Product</a>
           </li>
           <li>
             <a href="#Search">Search</a>
@@ -39,6 +38,24 @@
           <li>
             <a href="#Filter">Filter</a>
           </li>
+          <li>
+            <a href="#cart">My Cart</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{% url 'register' %}">Register</a>
+          </li>
+          <li>
+            <a href="{% url 'login' %}">Login</a>
+          </li>
+          {% endif %} {% if is_superuser %}
+          <li>
+            <a href="{% url 'add_product' %}">Add Product</a>
+          </li>
+          <li>
+            <a href="{% url 'users' %}">All Users</a>
+          </li>
+          {% endif %}
         </ul>
       </nav>
     </header>

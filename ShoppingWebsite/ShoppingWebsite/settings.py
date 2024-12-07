@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "Shop.User"
 
 # Application definition
 
@@ -53,6 +54,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "ShoppingWebsite.urls"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 TEMPLATES = [
     {

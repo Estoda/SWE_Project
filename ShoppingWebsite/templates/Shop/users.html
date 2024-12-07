@@ -1,0 +1,19 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="users">
+  {% if error_message %}
+  <h1>{{ error_message }}</h1>
+  {% endif %} {% if not users %}
+  <h1>No users available.</h1>
+  {% else %}
+  <h1>All Users</h1>
+  <div class="user-list">
+    <div class="user-item">
+      {% for user in users %}
+      <h2>{{ user.username }}</h2>
+      <p>{{ user.email }}</p>
+      <p>Administration: {{ user.is_superuser }}</p>
+    </div>
+    {% endfor %} {% endif %}
+  </div>
+</section>
+{% endblock %}

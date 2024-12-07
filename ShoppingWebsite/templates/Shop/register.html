@@ -1,0 +1,35 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="login">
+  <h1>Register</h1>
+  {% if error_messages %}
+  <div class="error-messages" style="color: red">
+    <ul>
+      {% for field, messages in error_messages.items %}
+      <li><strong>{{ field }}:</strong> {{ messages|join:", " }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <form action="{% url 'register' %}" method="POST">
+    {% csrf_token %}
+    <div>
+      <input type="text" name="username" id="username" placeholder="Username" />
+    </div>
+    <div>
+      <input type="email" name="email" id="email" placeholder="Email" />
+    </div>
+    <div>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Password"
+      />
+    </div>
+    <button type="submit">Register</button>
+  </form>
+  <div class="other">
+    <p>Do you have an account? <a href="{% url 'login' %}">Register</a></p>
+  </div>
+</section>
+{% endblock %}

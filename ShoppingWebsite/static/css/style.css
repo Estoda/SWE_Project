@@ -1,5 +1,5 @@
 :root {
-    --main-color: #dc1fb3;
+    --main-color: #c94cac;
     --main-color2: #21137e;
 }
 
@@ -8,7 +8,7 @@ a {
 }
 
 body {
-    font-family: "Cairo", sans-serif;
+    font-family: "Josefin Sans", sans-serif;
     margin: 0;
     overflow-x: hidden;
 }
@@ -90,6 +90,50 @@ header ul>li>a:hover::before {
     left: 0;
 }
 
+header ul>li>form {
+    margin: 0;
+    /* To ensure alignment with links */
+    display: inline;
+    /* Keep it inline */
+}
+
+header ul>li>form .logout-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 72px;
+    position: relative;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0 30px;
+    transition: 0.3s;
+    overflow: hidden;
+    font-weight: bold;
+    border: none;
+    /* Remove button border */
+    background: none;
+    /* Remove button background */
+    cursor: pointer;
+    /* Make it behave like a link */
+}
+
+header ul>li>form .logout-link::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    -webkit-text-fill-color: content-box;
+    bottom: 0;
+    left: -100%;
+    transition: 0.3s;
+}
+
+header ul>li>form .logout-link:hover::before {
+    left: 0;
+}
+
 main {
     min-height: 80vh;
     padding: 200px 0;
@@ -99,7 +143,6 @@ main {
 }
 
 main section {
-
     padding: 50px;
     background-color: white;
     -webkit-box-shadow: 0 0 10px #ddd;
@@ -108,6 +151,42 @@ main section {
     border-radius: 20px;
     display: flex;
     color: #191919;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+main section h1 {
+    padding: 0;
+}
+
+main section.about {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: normal;
+}
+
+main section.about div.links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+main section.about a {
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-position 0.3s ease;
+}
+
+main section.about a:hover {
+    background-position: 100% 50%;
 }
 
 main section.login {
@@ -160,8 +239,49 @@ main section.login button:hover {
     background-position: 100% 50%;
 }
 
-main section>div.other {
+main section.login>div.other {
     text-align: center;
+}
+
+main section.products .product-list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+
+main section.products .product-list .product-item {
+    flex-direction: column;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+}
+
+main section.products .product-list img {
+    width: 300px;
+    height: 300px;
+}
+
+main section.products .product-list button {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    padding: 10px 0;
+    color: white;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    transition: 0.5s;
+}
+
+main section.products .product-list button:hover {
+    background-position: 100% 50%;
 }
 
 footer {

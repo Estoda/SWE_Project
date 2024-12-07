@@ -6,6 +6,10 @@
     <h3>Hello, {{ username }}!</h3>
     {% else %}
     <h3>Please login or register to access the website</h3>
+    <div class="links">
+      <a href="{% url 'login'%}">Login</a>
+      <a href="{% url 'register'%}"> Register</a>
+    </div>
     {% endif %}
   </div>
   <img src="{% static 'images/logo.png' %}" alt="Logo" />
