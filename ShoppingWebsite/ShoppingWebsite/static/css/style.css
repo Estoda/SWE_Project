@@ -10,6 +10,7 @@ a {
 body {
     font-family: "Cairo", sans-serif;
     margin: 0;
+    overflow-x: hidden;
 }
 
 html {
@@ -25,7 +26,10 @@ ul {
 header {
     background-color: white;
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    z-index: 1000;
     -webkit-box-shadow: 0 0 10px #ddd;
     -moz-box-shadow: 0 0 10px #ddd;
     box-shadow: 0 0 10px #ddd;
@@ -87,24 +91,77 @@ header ul>li>a:hover::before {
 }
 
 main {
-    height: 100vh;
+    min-height: 80vh;
+    padding: 200px 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-main div {
-    font-weight: bold;
-    font-size: 40px;
+main section {
+
     padding: 50px;
     background-color: white;
     -webkit-box-shadow: 0 0 10px #ddd;
     -moz-box-shadow: 0 0 10px #ddd;
     box-shadow: 0 0 10px #ddd;
-    border-radius: 10px;
+    border-radius: 20px;
     display: flex;
     color: #191919;
-    font-family: 'Courier New', Courier, monospace;
+}
+
+main section.login {
+    flex-direction: column;
+    font-weight: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+main section.login form {
+    padding: 0;
+}
+
+main section>h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    padding: 50px;
+}
+
+main section.login input {
+    outline: none;
+    border-color: transparent transparent #bbb;
+    position: relative;
+    padding: 15px 10px;
+    margin: 10px;
+    font-size: 34px;
+}
+
+main section.login input::placeholder {
+    color: #bbb;
+}
+
+main section.login button {
+    width: 100%;
+    margin: 35px 0;
+    padding: 20px 10px;
+    color: white;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    border: none;
+    outline: none;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+main section.login button:hover {
+    background-position: 100% 50%;
+}
+
+main section>div.other {
+    text-align: center;
 }
 
 footer {

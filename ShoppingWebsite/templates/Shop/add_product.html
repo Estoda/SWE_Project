@@ -1,0 +1,11 @@
+{% extends "Shop/base.html" %} {% block content %}
+<section>
+  <h1>Add New Product</h1>
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <!-- Render the form fields as paragraph elements -->
+    <button type="submit">Add Product</button>
+  </form>
+</section>
+
+{% endblock %}

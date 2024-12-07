@@ -1,0 +1,13 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="about">
+  <div>
+    <h1>Welcome to My Shopping Website</h1>
+    {% if username %}
+    <h3>Hello, {{ username }}!</h3>
+    {% else %}
+    <h3>Please login or register to access the website</h3>
+    {% endif %}
+  </div>
+  <img src="{% static 'images/logo.png' %}" alt="Logo" />
+</section>
+{% endblock %}

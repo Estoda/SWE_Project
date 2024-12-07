@@ -1,0 +1,36 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="login">
+  <h1>Login</h1>
+  {% if error_message %}
+  <p style="color: red">{{ error_message }}</p>
+  {% endif %}
+  <form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+    <div class="user">
+      <input
+        type="text"
+        name="username"
+        id="username"
+        required
+        placeholder="Username"
+      />
+    </div>
+    <div class="pass">
+      <input
+        type="password"
+        name="password"
+        id="password"
+        required
+        placeholder="Password"
+      />
+    </div>
+    <button type="submit">Login</button>
+  </form>
+  <div class="other">
+    <p>Forgot <a href="">Password</a>?</p>
+    <p>
+      Don't have an account? <a href="{% static '../register/' %}">Register</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

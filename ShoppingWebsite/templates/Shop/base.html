@@ -16,16 +16,22 @@
   </head>
   <body>
     <header>
-      <a href="#home" class="logo">
+      <a href="{% url 'home' %}" class="logo">
         <img src="{% static 'images/logo.png' %}" alt="" />
       </a>
       <nav>
         <ul>
           <li>
-            <a href="#Register">Register</a>
+            <a href="{% url 'register' %}">Register</a>
           </li>
           <li>
-            <a href="#Login">Login</a>
+            <a href="{% url 'login' %}">Login</a>
+          </li>
+          <li>
+            <a href="{% url 'products' %}">Products</a>
+          </li>
+          <li>
+            <a href="{% url 'add_product' %}">Add Product</a>
           </li>
           <li>
             <a href="#Search">Search</a>
@@ -36,13 +42,7 @@
         </ul>
       </nav>
     </header>
-    <main>
-      <!-- {% block content %}{% endblock %} -->
-      <div>
-        <p>Welcome to My Shopping Website</p>
-        <img src="{% static 'images/logo.png' %}" alt="" />
-      </div>
-    </main>
+    <main>{% block content %} {% endblock %}</main>
     <footer>
       <div>
         <div class="logo">

@@ -1,0 +1,23 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="products">
+  {% if not products %}
+  <h1>No products available.</h1>
+  {% else %}
+  <h1>All Products</h1>
+  <div class="product-list">
+    <div class="product-item">
+      {% for product in products %}
+      <h2>{{ product.name }}</h2>
+      <p>{{ product.description }}</p>
+      <p>Price: {{ product.price }}</p>
+      <p>Stock: {{ product.stock }}</p>
+
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
+    {% endfor %} {% endif %}
+  </div>
+</section>
+{% endblock %}
