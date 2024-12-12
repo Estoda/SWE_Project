@@ -1,5 +1,4 @@
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password
 from rest_framework import permissions, status, viewsets
@@ -151,6 +150,7 @@ class LogoutView(APIView):
 
 class ProductViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
+    queryset = models.Product.objects.all()
 
     def list(self, request):
         products = models.Product.objects.all()
@@ -168,22 +168,58 @@ class ProductViewSet(viewsets.ViewSet):
             },
         )
 
+    def create(self, request):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return render(
+                request,
+                "Shop/products.html",
+                {"error_message": "Please, login or register first!"},
+            )
 
-def product_list(request):
-    token = request.COOKIES.get("jwt")
-    payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-    user_id = payload["id"]
-    user = models.User.objects.get(id=user_id)
-    products = models.Product.objects.all()
-    return render(
-        request,
-        "Shop/products.html",
-        {
-            "products": products,
-            "username": user.username,
-            "is_superuser": user.is_superuser,
-        },
-    )
+        quantity = int(request.data.get("quantity", 1))
+        product_id = request.data.get("product_id")
+
+        if not product_id:
+            return render(
+                request,
+                "Shop/products.html",
+                {"error_message": "Product ID is required!"},
+            )
+
+        product = models.Product.objects.filter(id=product_id).first()
+
+        if not product:
+            return render(
+                request, "Shop/products.html", {"error_message": "Product not found!"}
+            )
+
+        if quantity > product.stock:
+            return render(
+                request,
+                "Shop/products.html",
+                {"error_message": "Not enough stock available!"},
+            )
+
+        product.stock -= quantity
+        product.save()
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        cart_item, created = models.CartItem.objects.get_or_create(
+            cart=cart, product=product
+        )
+        if not created:
+            cart_item.quantity += quantity
+        else:
+            cart_item.quantity = quantity
+
+        cart_item.total = cart_item.product.price * cart_item.quantity
+        cart_item.save()
+
+        return redirect("cart_detail")
 
 
 class AddProductView(APIView):
@@ -237,9 +273,154 @@ class AddProductView(APIView):
 
         if form.is_valid():
             form.save()
-            return redirect("products")  # Redirect to the product list or home page
+            return redirect("products")
         return render(
             request,
             "Shop/add_product.html",
             {"form": form, "error_message": "Invalid data. Please try again."},
         )
+
+
+class CartViewSet(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny]
+
+    def list(self, request):
+        products = models.Product.objects.all()
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        context = {
+            "cart": cart,
+            "items": cart.items.all(),
+            "total": cart.get_total(),
+            "username": user.username,
+            "is_superuser": user.is_superuser,
+        }
+        return render(request, "Shop/cart_detail.html", context)
+
+
+class CarItemView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = serializers.CartItemSerializer
+
+    def get(self, request, item_id=None):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        item = get_object_or_404(cart.items, id=item_id)
+        serializer = self.serializer_class(item)
+        if not item:
+            return render(
+                request,
+                "Shop/cart_item.html",
+                {
+                    "error_message": "Item not found!",
+                    "item": item,
+                    "total": cart.get_total(),
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )
+        return render(
+            request,
+            "Shop/cart_item.html",
+            {
+                "error_message": None,
+                "item": item,
+                "total": cart.get_total(),
+                "username": user.username,
+                "is_superuser": user.is_superuser,
+            },
+        )
+
+    def put(self, request, item_id):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        data = request.data.copy()
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        item = get_object_or_404(cart.items, id=item_id)
+        data["cart"] = cart.id  # Include the cart ID
+        data["product"] = item.product.id  # Include the product ID
+        serializer = self.serializer_class(item, data=data)
+        if serializer.is_valid():
+            updated_item = serializer.save()
+            updated_item.total = updated_item.product.price * updated_item.quantity
+            updated_item.save()
+
+            cart.total = cart.get_total()
+            cart.save()
+            return render(
+                request,
+                "Shop/cart_item.html",
+                {
+                    "error_message": None,
+                    "item": item,
+                    "total": cart.get_total(),
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )
+        else:
+            return render(
+                request,
+                "Shop/cart_item.html",
+                {
+                    "error_message": serializer.errors,
+                    "item": item,
+                    "total": cart.get_total(),
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )
+
+    def post(self, request, item_id=None):
+        if request.POST.get("_method") == "PUT":
+            return self.put(request, item_id)
+        elif request.POST.get("_method") == "DELETE":
+            return self.delete(request, item_id)
+        return Response(
+            {"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+    def delete(self, request, item_id=None):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        item = get_object_or_404(cart.items, id=item_id)
+
+        if item:
+            product = item.product
+            product.stock += item.quantity
+            product.save()
+            item.delete()
+            return render(
+                request,
+                "Shop/cart_detail.html",
+                {
+                    "error_message": None,
+                    "items": cart.items.all(),
+                    "total": cart.get_total(),
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )

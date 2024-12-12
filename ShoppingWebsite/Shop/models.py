@@ -44,7 +44,7 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_total(self):
-        return sum(item.get_total_price() for item in self.items.all())
+        return sum(item.total for item in self.items.all())
 
     def __str__(self):
         return f"Cart for {self.user.username}"
@@ -54,9 +54,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator])
-
-    def get_total_price(self):
-        return self.product.price * self.quantity
+    total = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"

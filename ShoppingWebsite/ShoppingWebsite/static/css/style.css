@@ -214,6 +214,7 @@ main section.login input {
     padding: 15px 10px;
     margin: 10px;
     font-size: 30px;
+    transition: 0.3s;
 }
 
 main section.login input::placeholder {
@@ -286,6 +287,48 @@ main section.products .product-list button:hover {
     background-position: 100% 50%;
 }
 
+main section.cart a img {
+    width: 300px;
+    height: 300px;
+}
+
+main section.cart .item-list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+main section.cart .item-list .item-item {
+    flex-direction: column;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+}
+
+main section.cart .item-list .item-item button {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    border-radius: 0;
+    padding: 10px 0;
+    color: white;
+    transition: 0.3s;
+}
+
+main section.cart .item-list button:hover {
+    background-position: 100% 50%;
+}
+
 footer {
     background-color: #191919;
     color: white;
@@ -350,3 +393,31 @@ footer .logo img {
 footer .logo:hover img {
     transform: scale(1.2);
 }
+
+/* 
+
+12/11 | Wednesday | Quiz Algorithm
+12/12 | Thursday | Assignment AI
+12/13 | Friday | 
+12/14 | Saturday | Assignment OS + Practical OS
+12/15 | Sunday | Practical DM
+12/16 | Monday | 
+12/17 | Tuesday | 
+12/18 | Wednesday | 
+12/19 | Thursday | Practical Algorithm
+12/20 | Friday | 
+12/21 | Saturday | SWE Project
+12/22 | Sunday | 
+12/23 | Monday | Practical CA
+12/24 | Tuesday | 
+12/25 | Wednesday | 
+12/26 | Thursday | 
+12/27 | Friday | 
+12/28 | Saturday | >Start Final<
+12/29 | Sunday | 
+12/30 | Monday | 
+12/31 | Tuesday | 
+01/01 | Tuesday | 
+
+
+*/

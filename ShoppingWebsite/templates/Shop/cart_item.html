@@ -1,0 +1,30 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="cart_item">
+  <h1>{{ item.product.name }}</h1>
+  {% if error_message %}
+  <div class="error-message" style="color: red">{{ error_message }}</div>
+  {% else %}
+  <div class="item-item">
+    <div class="image">
+      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+    </div>
+    {{ item.quantity }} x {{ item.product.name }} = ${{ item.total }}
+    <form action="{% url 'update-cart-item' item.id %}" method="post">
+      <input type="hidden" name="_method" value="PUT" />
+      <input
+        type="number"
+        name="quantity"
+        value="{{ item.quantity }}"
+        min="0"
+        max="{{ item.product.stock }}"
+      />
+      <button type="submit">Update</button>
+    </form>
+    <form action="{% url 'delete-cart-item' item.id %}" method="post">
+      <input type="hidden" name="_method" value="DELETE" />
+      <button type="submit">Remove</button>
+    </form>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
