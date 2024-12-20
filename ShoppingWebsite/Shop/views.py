@@ -9,7 +9,7 @@ from . import serializers
 from . import models
 import datetime, jwt
 from django.conf import settings
-from .forms import ProductForm
+from .forms import ProductForm, PaymentForm
 from django.db.models import Q
 
 # Create your views here.
@@ -328,7 +328,6 @@ class CartViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
 
     def list(self, request):
-        products = models.Product.objects.all()
         token = request.COOKIES.get("jwt")
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         user_id = payload["id"]
@@ -345,6 +344,90 @@ class CartViewSet(viewsets.ViewSet):
             "is_superuser": user.is_superuser,
         }
         return render(request, "Shop/cart_detail.html", context)
+
+
+class CheckoutView(viewsets.ViewSet):
+    permission_classes = [permissions.AllowAny]
+
+    def list(self, request):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        order, _ = models.Order.objects.get_or_create(user=user)
+        order.cart = cart
+        order.total_amount = cart.get_total()
+
+        form = PaymentForm()
+
+        if not cart.items:
+            context = {
+                "error_message": "Your cart is empty!",
+                "cart": cart,
+                "form": form,
+                "items": cart.items.all(),
+                "total": cart.get_total(),
+                "username": user.username,
+                "is_superuser": user.is_superuser,
+            }
+        context = {
+            "cart": cart,
+            "items": cart.items.all(),
+            "form": form,
+            "total": cart.get_total(),
+            "username": user.username,
+            "is_superuser": user.is_superuser,
+        }
+        return render(request, "Shop/checkout.html", context)
+
+    def post(self, request):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        cart, _ = models.Cart.objects.get_or_create(user=user)
+        order, _ = models.Order.objects.get_or_create(user=user)
+        order.cart = cart
+        order.total_amount = cart.get_total()
+
+        form = ProductForm(request.POST, request.FILES)
+        card_number = request.data.get("card_number")
+        exp = request.data.get("expiration_date")
+        cvv = request.data.get("cvv")
+        cost = order.total_amount
+
+        if not card_number or not exp or not cvv:
+            render(
+                request,
+                "Shop/checkout.html",
+                {
+                    "error_message": "Please fill in all fields!",
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )
+
+        card = models.Card.objects.create(
+            card_number=card_number, expiration_date=exp, cvv=cvv, cost=cost
+        )
+
+        order.is_paid = True
+        order.save()
+
+        cart.items.all().delete()
+        order.delete()
+
+        if form.is_valid():
+            form.save()
+
+        return redirect("home")
 
 
 class CarItemView(APIView):
@@ -467,3 +550,51 @@ class CarItemView(APIView):
                     "is_superuser": user.is_superuser,
                 },
             )
+
+
+# class CheckoutView(viewsets.ViewSet):
+#     permission_classes = [permissions.AllowAny]
+
+#     def list(self, request):
+#         token = request.COOKIES.get("jwt")
+#         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+#         user_id = payload["id"]
+#         user = models.User.objects.get(id=user_id)
+#         if not user:
+#             return redirect("login")
+
+#         cart, _ = models.Cart.objects.get_or_create(user=user)
+#         items = cart.items.all()
+#         total_amount = cart.get_total()
+#         order, _ = models.Order.objects.get_or_create(
+#             user=user, total_amount=total_amount, cart=cart
+#         )
+#         order.is_paid = False
+#         order.save()
+
+#         if not items:
+#             return render(
+#                 request,
+#                 "Shop/checkout.html",
+#                 {
+#                     "error_message": "Your cart is empty!",
+#                     "items": cart.items.all(),
+#                     "total": total_amount,
+#                     "username": user.username,
+#                     "is_superuser": user.is_superuser,
+#                 },
+#             )
+#         cart.items.all().delete()
+
+#         return render(
+#             request,
+#             "Shop/checkout.html",
+#             {
+#                 "error_message": None,
+#                 "order": order,
+#                 "items": cart.items.all(),
+#                 "total": total_amount,
+#                 "username": user.username,
+#                 "is_superuser": user.is_superuser,
+#             },
+#         )

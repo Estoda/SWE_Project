@@ -23,6 +23,12 @@ ul {
     padding: 0;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 header {
     background-color: white;
     position: fixed;
@@ -150,21 +156,24 @@ main section {
     -webkit-box-shadow: 0 0 10px #ddd;
     -moz-box-shadow: 0 0 10px #ddd;
     box-shadow: 0 0 10px #ddd;
-    border-radius: 20px;
+    border-radius: 6px;
     display: flex;
     color: #191919;
     flex-direction: column;
     text-align: center;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 main section>h1 {
-    text-align: center;
+    width: 100%;
     font-weight: bold;
     font-size: 40px;
     padding-bottom: 50px;
     margin: 0;
+    text-align: start;
+    margin-left: 10%;
 }
 
 main section.about {
@@ -207,7 +216,8 @@ main section.login form {
 }
 
 
-main section.login input {
+main section.login input,
+main section.login textarea {
     outline: none;
     border-color: transparent transparent #bbb;
     position: relative;
@@ -215,6 +225,14 @@ main section.login input {
     margin: 10px;
     font-size: 30px;
     transition: 0.3s;
+
+}
+
+main section.login textarea {
+    resize: none;
+    height: 38px;
+    border-width: 2px;
+    max-width: 313px;
 }
 
 main section.login input::placeholder {
@@ -244,32 +262,196 @@ main section.login>div.other {
     text-align: center;
 }
 
+
+
+main section.products .search {
+    width: 100%;
+    display: flex;
+    gap: 5%;
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+main section.products .search h1 {
+    min-width: fit-content;
+    font-weight: bold;
+    font-size: 40px;
+    margin: 0;
+    text-align: start;
+}
+
+main section.products .search form {
+    width: calc(80% - 4px);
+    display: flex;
+}
+
+main section.products .search form input {
+    outline: none;
+    border-width: 1px;
+    border-color: #bbb white #bbb #bbb;
+    border-radius: 10px 0 0 10px;
+    position: relative;
+    padding: 15px 20px;
+    margin: 0px;
+    font-size: 30px;
+    width: calc(100% - 92px);
+}
+
+main section.products .search form button {
+    border: none;
+    outline: none;
+    padding: 15px 20px;
+    font-weight: bold;
+    border-radius: 0;
+    color: white;
+    border-radius: 0 10px 10px 0;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    transition: 0.5s;
+    transform: translateX(-25px);
+}
+
+main section.products .search form button:hover {
+    background-position: 100% 50%;
+    border-radius: 10px;
+}
+
 main section.products .product-list {
     display: flex;
     flex-direction: row;
-    gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
+    /* align-items: center; */
 }
 
 
 main section.products .product-list .product-item {
     flex-direction: column;
-    border: 1px solid #bbb;
-    border-radius: 10px;
     overflow: hidden;
-    padding: 0;
-    -webkit-box-shadow: 0 0 10px #ddd;
-    -moz-box-shadow: 0 0 10px #ddd;
-    box-shadow: 0 0 10px #ddd;
+    padding: 24px;
+}
+
+main section.products .product-list .product-item p {
+    margin: 0;
 }
 
 main section.products .product-list img {
     width: 300px;
     height: 300px;
+    transition: all 0.3s;
+    transform: scale(1);
+    max-width: 100%;
 }
 
-main section.products .product-list button {
+main section.products .product-list img:hover {
+    transform: scale(1.02);
+    --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
+}
+
+main section.products .product-list .details1 {
+    display: flex;
+    padding: 12px 10px;
+    justify-content: space-between;
+    align-items: center;
+    color: #4b5563 font
+}
+
+main section.products .product-list .details1 i {
+    transition: 0.3s;
+}
+
+main section.products .product-list .details1 i:hover {
+    color: red;
+}
+
+main section.products .product-list .details2 {
+    color: rgb(17, 24, 39);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 10px;
+}
+
+main section.cart_item {
+    position: relative;
+}
+
+main section.cart_item img {
+    min-width: 300px;
+    min-height: 300px;
+    max-width: 500px
+}
+
+main section.cart_item form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+main section.cart_item form label {
+    font-weight: bold;
+}
+
+main section.cart_item form input {
+    width: calc(100% - 82px);
+    outline: none;
+    border-width: 1px;
+    border-color: #bbb white #bbb #bbb;
+    position: relative;
+    padding: 7px 20px;
+    margin: 0px;
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+main section.cart_item button {
+    border: none;
+    outline: none;
+    padding: 7px 20px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    transition: 0.5s;
+}
+
+main section.cart_item button:hover {
+    background-position: 100% 50%;
+}
+
+main section.cart_item .details1 {
+    display: flex;
+    text-align: start;
+    padding: 12px 10px;
+    align-items: center;
+    color: #4b5563 font
+}
+
+main section.cart_item .details2 {
+    color: rgb(17, 24, 39);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 10px;
+}
+
+main section.cart_item button.cart {
+    padding: 15px 20px;
+}
+
+main section.cart_item button.ccc {
+    margin-top: 10px;
+}
+
+/* main section.products .product-list button {
     width: 100%;
     border: none;
     outline: none;
@@ -281,52 +463,60 @@ main section.products .product-list button {
     background-position: 0% 50%;
     -webkit-text-fill-color: white;
     transition: 0.5s;
-}
-
+} */
+/* 
 main section.products .product-list button:hover {
     background-position: 100% 50%;
-}
+} */
 
-main section.cart a img {
-    width: 300px;
-    height: 300px;
-}
-
-main section.cart .item-list {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-main section.cart .item-list .item-item {
-    flex-direction: column;
-    border: 1px solid #bbb;
-    border-radius: 10px;
-    overflow: hidden;
-    padding: 0;
-    -webkit-box-shadow: 0 0 10px #ddd;
-    -moz-box-shadow: 0 0 10px #ddd;
-    box-shadow: 0 0 10px #ddd;
-}
-
-main section.cart .item-list .item-item button {
+main section.car button,
+main section.car .button {
     width: 100%;
     border: none;
     outline: none;
+    border-radius: 0;
+    padding: 15px 20px;
+    color: white;
     background: linear-gradient(90deg, var(--main-color), var(--main-color2));
     background-size: 200% 200%;
     background-position: 0% 50%;
     -webkit-text-fill-color: white;
-    border-radius: 0;
-    padding: 10px 0;
-    color: white;
-    transition: 0.3s;
+    transition: 0.5s;
+    margin-top: 10px;
 }
 
-main section.cart .item-list button:hover {
+main section.car button:hover,
+main section.car .button:hover {
     background-position: 100% 50%;
+}
+
+
+main section.add_product form div,
+main section.add_product form>input {
+    max-width: 450px;
+}
+
+main section.add_product form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+main section.add_product form div:last-of-type input {
+    font-size: 16px;
+}
+
+main section.users .user-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+main section.users .user-list .user-item {
+    flex-direction: column;
+    padding: 10px;
 }
 
 footer {
@@ -337,6 +527,8 @@ footer {
     flex-direction: column;
     align-items: center;
 }
+
+
 
 footer>div {
     display: flex;
@@ -403,7 +595,7 @@ footer .logo:hover img {
 12/15 | Sunday | Practical DM
 12/16 | Monday | 
 12/17 | Tuesday | 
-12/18 | Wednesday | 
+12/18 | Wednesday | AI Project 
 12/19 | Thursday | Practical Algorithm
 12/20 | Friday | 
 12/21 | Saturday | SWE Project

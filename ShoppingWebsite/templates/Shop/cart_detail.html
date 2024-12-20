@@ -27,7 +27,7 @@
     {% endfor %}
   </div>
   <p><strong>Total: </strong>${{ total }}</p>
-  <form action="">
+  <form action="{% url 'checkout' %}" method="get">
     <button type="submit">Checkout</button>
   </form>
   {% else %}

@@ -33,6 +33,7 @@ urlpatterns = [
         views.CarItemView.as_view(),
         name="delete-cart-item",
     ),
+    path("checkout/", views.CheckoutView.as_view({"get": "list"}), name="checkout"),
 ]
 
 if settings.DEBUG:

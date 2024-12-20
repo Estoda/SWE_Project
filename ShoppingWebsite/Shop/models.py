@@ -54,7 +54,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator])
-    total = models.IntegerField(default=0)
+    total = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
@@ -63,16 +63,16 @@ class CartItem(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     cart = models.OneToOneField(Cart, on_delete=models.CASCADE)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            for item in self.cart.items.all():
-                item.product.stock -= item.quantity
-                item.product.save()
-        super().save(*args, **kwargs)
+    total_amount = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Order #{self.id} for {self.user.username}"
+
+
+class Card(models.Model):
+    card_number = models.CharField(max_length=16)
+    expiration_date = models.CharField(max_length=8)
+    cvv = models.CharField(max_length=3)
+    cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)

@@ -1,0 +1,36 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="products car">
+    <div>
+        <h1>Checkout</h1>
+        {% if error_message %}
+        <div class="error-message" style="color: red">{{ error_message }}</div>
+        {% else %} {% if items %}
+        <div class="product-list">
+            {% for item in items %}
+            <div class="product-item">
+                <div class="image">
+                    <a href="/cart/cart_item/{{ item.id }}"><img src="{{ item.product.image.url }}"
+                            alt="{{ item.product.name }}" /></a>
+                </div>
+                <div class="details1">
+                    {{ item.quantity }} x {{ item.name }}(${{ item.product.price }}) = ${{ item.total }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p><strong>Total: </strong>${{ total }}</p>
+        {% else %}
+        <p>Your cart is empty.</p>
+    </div>
+    <div>
+        {% endif %}
+        <h1 style="margin-top: 100px">Payment Details</h1>
+        <div class="pay">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %} {{ form.as_div }}
+                <button type="submit">Complete Purchase</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endif %} {% endblock %}

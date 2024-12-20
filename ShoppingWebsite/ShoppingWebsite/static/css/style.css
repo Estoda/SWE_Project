@@ -519,6 +519,76 @@ main section.users .user-list .user-item {
     padding: 10px;
 }
 
+main section .pay {
+    flex-direction: column;
+    font-weight: 400;
+    justify-content: center;
+    align-items: center;
+}
+
+main section .pay form {
+    padding: 0;
+    width: 100%;
+}
+
+main section .pay form div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+main section .pay form div label {
+    min-width: 120px;
+}
+
+main section .pay form div:last-of-type {
+    display: none;
+}
+
+main section .pay input,
+main section .pay textarea {
+    outline: none;
+    border-color: transparent transparent #bbb;
+    position: relative;
+    padding: 15px 10px;
+    margin: 10px;
+    font-size: 30px;
+    transition: 0.3s;
+    width: calc(100% - 130px);
+}
+
+main section .pay textarea {
+    resize: none;
+    height: 38px;
+    border-width: 2px;
+    max-width: 313px;
+}
+
+main section .pay input::placeholder {
+    color: #bbb;
+}
+
+main section .pay button {
+    width: 100%;
+    margin: 35px 0;
+    padding: 20px 10px;
+    color: white;
+    background: linear-gradient(90deg, var(--main-color), var(--main-color2));
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    -webkit-text-fill-color: white;
+    border: none;
+    outline: none;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+main section .pay button:hover {
+    background-position: 100% 50%;
+}
+
 footer {
     background-color: #191919;
     color: white;
