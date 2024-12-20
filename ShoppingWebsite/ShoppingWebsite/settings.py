@@ -26,6 +26,7 @@ SECRET_KEY = "django-insecure-mozu2q%uw#k9*7+g)i#r8=9+(j8s@@2gd=no*czwcn70-40uco
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ALLOWED_HOSTS = [estoda1.pythonanywhere.com]
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "Shop.User"
@@ -81,6 +82,16 @@ WSGI_APPLICATION = "ShoppingWebsite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "Estoda1$Shop",
+#         "USER": "Estoda1",
+#         "PASSWORD": "jana@1234",
+#         "HOST": "estoda1.mysql.pythonanywhere-services.com",
+#         "PORT": "3306",
+#     }
+# }
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",

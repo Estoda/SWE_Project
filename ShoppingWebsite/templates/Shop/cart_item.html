@@ -8,7 +8,10 @@
     <div class="image">
       <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
     </div>
-    {{ item.quantity }} x {{ item.product.name }} = ${{ item.total }}
+    <div class="fur">
+      {{ item.quantity }} x <strong>{{ item.product.name }}</strong> =
+      ${{item.total }}
+    </div>
     <form action="{% url 'update-cart-item' item.id %}" method="post">
       <input type="hidden" name="_method" value="PUT" />
       <input
@@ -18,11 +21,11 @@
         min="0"
         max="{{ item.product.stock }}"
       />
-      <button type="submit">Update</button>
+      <button class="cart" type="submit">Update</button>
     </form>
     <form action="{% url 'delete-cart-item' item.id %}" method="post">
       <input type="hidden" name="_method" value="DELETE" />
-      <button type="submit">Remove</button>
+      <button class="cart ccc" type="submit">Remove</button>
     </form>
   </div>
   {% endif %}

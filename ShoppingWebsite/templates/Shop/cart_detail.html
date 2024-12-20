@@ -1,12 +1,12 @@
 {% extends "Shop/base.html" %} {% load static %} {% block content %}
-<section class="cart">
+<section class="products car">
   <h1>Your Cart</h1>
   {% if error_message %}
   <div class="error-message" style="color: red">{{ error_message }}</div>
   {% else %} {% if items %}
-  <div class="item-list">
+  <div class="product-list">
     {% for item in items %}
-    <div class="item-item">
+    <div class="product-item">
       <div class="image">
         <a href="cart_item/{{ item.id }}"
           ><img
@@ -14,8 +14,11 @@
             alt="{{ item.product.name }}"
         /></a>
       </div>
-      {{ item.quantity }} x {{ item.product.name }}(${{ item.product.price }}) =
-      ${{ item.total }}
+      <div class="details1">
+        {{ item.quantity }} x {{ item.product.name }}(${{ item.product.price }})
+        = ${{ item.total }}
+      </div>
+
       <form action="{% url 'delete-cart-item' item.id %}" method="post">
         <input type="hidden" name="_method" value="DELETE" />
         <button type="submit">Remove</button>
@@ -23,12 +26,16 @@
     </div>
     {% endfor %}
   </div>
-  <p>Total: ${{ total }}</p>
-  <a href="">Place Order</a>
+  <p><strong>Total: </strong>${{ total }}</p>
+  <form action="">
+    <button type="submit">Checkout</button>
+  </form>
   {% else %}
   <p>Your cart is empty.</p>
   {% endif %}
-  <a href="{% url 'products' %}">Add Product</a>
+  <a style="width: fit-content" class="button" href="{% url 'products' %}"
+    >Add Product</a
+  >
   {% endif %}
 </section>
 {% endblock %}

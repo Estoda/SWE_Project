@@ -1,11 +1,11 @@
 {% extends "Shop/base.html" %} {% block content %}
-<section>
+<section class="login add_product">
   <h1>Add New Product</h1>
   {% if error_message %}
   <div class="error-message" style="color: red">{{ error_message }}</div>
   {% else %}
   <form method="post" enctype="multipart/form-data">
-    {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %} {{ form.as_div }}
     <button type="submit">Add Product</button>
   </form>
   {% endif %}

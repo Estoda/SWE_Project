@@ -1,0 +1,33 @@
+{% extends "Shop/base.html" %} {% load static %} {% block content %}
+<section class="cart_item">
+  <h1>{{ product.name }}</h1>
+  {% if error_message %}
+  <div class="error-message" style="color: red">{{ error_message }}</div>
+  {% else %}
+  <div class="item-item">
+    <div class="image">
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+    </div>
+    <div class="details1">{{ product.description }}</div>
+    <div class="details2">
+      <p><strong>Price: </strong> ${{ product.price }}</p>
+      <p><strong>Stock: </strong> {{ product.stock }}</p>
+    </div>
+    <form method="POST" action="{% url 'product-add-to-cart' %}">
+      {% csrf_token %}
+      <label for="quantity">Quantity:</label>
+      <input
+        type="number"
+        name="quantity"
+        id="quantity"
+        value="0"
+        max="{{ product.stock }}"
+        min="1"
+      />
+      <input hidden type="number" name="product_id" value="{{ product.id }}" />
+      <button type="submit">Add to Cart</button>
+    </form>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

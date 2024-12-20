@@ -10,6 +10,11 @@ urlpatterns = [
     path("register/", views.RegisterView.as_view(), name="register"),
     path("products/", views.ProductViewSet.as_view({"get": "list"}), name="products"),
     path(
+        "products/<int:product_id>/",
+        views.ProductItemView.as_view(),
+        name="product-item",
+    ),
+    path(
         "products/add-to-cart/",
         views.ProductViewSet.as_view({"post": "create"}),
         name="product-add-to-cart",

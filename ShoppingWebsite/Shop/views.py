@@ -10,6 +10,7 @@ from . import models
 import datetime, jwt
 from django.conf import settings
 from .forms import ProductForm
+from django.db.models import Q
 
 # Create your views here.
 
@@ -158,6 +159,11 @@ class ProductViewSet(viewsets.ViewSet):
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         user_id = payload["id"]
         user = models.User.objects.get(id=user_id)
+
+        search_query = request.GET.get("search", "")
+        if search_query:
+            products = models.Product.objects.filter(Q(name__icontains=search_query))
+
         return render(
             request,
             "Shop/products.html",
@@ -220,6 +226,43 @@ class ProductViewSet(viewsets.ViewSet):
         cart_item.save()
 
         return redirect("cart_detail")
+
+
+class ProductItemView(APIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = serializers.ProductSerializer
+
+    def get(self, request, product_id=None):
+        token = request.COOKIES.get("jwt")
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        user_id = payload["id"]
+        user = models.User.objects.get(id=user_id)
+        if not user:
+            return redirect("login")
+
+        product = models.Product.objects.filter(id=product_id).first()
+        serializer = self.serializer_class(product)
+        if not product:
+            return render(
+                request,
+                "Shop/product_item.html",
+                {
+                    "error_message": "Product not found!",
+                    "product": product,
+                    "username": user.username,
+                    "is_superuser": user.is_superuser,
+                },
+            )
+        return render(
+            request,
+            "Shop/product_item.html",
+            {
+                "error_message": None,
+                "product": product,
+                "username": user.username,
+                "is_superuser": user.is_superuser,
+            },
+        )
 
 
 class AddProductView(APIView):

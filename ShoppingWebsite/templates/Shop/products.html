@@ -5,38 +5,34 @@
   {% endif %} {% if not products %}
   <h1>No products available.</h1>
   {% else %}
-  <h1>All Products</h1>
+  <div class="search">
+    <h1>All Products</h1>
+    <form action="{% url 'products' %}" method="get">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search for products..."
+        value="{{ request.GET.search }}"
+      />
+      <button type="submit">Search</button>
+    </form>
+  </div>
   <div class="product-list">
     {% for product in products %} {% if product.stock != 0 %}
     <div class="product-item">
       <div class="image">
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+        <a href="../products/{{ product.id }}">
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+        </a>
       </div>
-      <h2>{{ product.name }}</h2>
-      <p>{{ product.description }}</p>
-      <p>{{ product.id }}</p>
-      <p>Price: ${{ product.price }}</p>
-      <p>Stock: {{ product.stock }}</p>
-
-      <form method="POST" action="{% url 'product-add-to-cart' %}">
-        {% csrf_token %}
-        <label for="quantity">Quantity:</label>
-        <input
-          type="number"
-          name="quantity"
-          id="quantity"
-          value="0"
-          max="{{ product.stock }}"
-          min="1"
-        />
-        <input
-          hidden
-          type="number"
-          name="product_id"
-          value="{{ product.id }}"
-        />
-        <button type="submit">Add to Cart</button>
-      </form>
+      <div class="details1">
+        <p>{{ product.name }}</p>
+        <i class="fa-regular fa-heart"></i>
+      </div>
+      <div class="details2">
+        <p><strong>Price: </strong> ${{ product.price }}</p>
+        <p><strong>Stock: </strong> {{ product.stock }}</p>
+      </div>
     </div>
     {% endif %} {% endfor %} {% endif %}
   </div>

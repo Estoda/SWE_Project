@@ -7,11 +7,11 @@
   {% else %}
   <h1>All Users</h1>
   <div class="user-list">
+    {% for user in users %}
     <div class="user-item">
-      {% for user in users %}
       <h2>{{ user.username }}</h2>
-      <p>{{ user.email }}</p>
-      <p>Administration: {{ user.is_superuser }}</p>
+      <a href="mailto:">{{ user.email }}</a>
+      <p><b>Administration: </b> <mark>{{ user.is_superuser }}</mark></p>
     </div>
     {% endfor %} {% endif %}
   </div>
