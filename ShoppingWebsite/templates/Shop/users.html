@@ -10,6 +10,7 @@
     {% for user in users %}
     <div class="user-item">
       <h2>{{ user.username }}</h2>
+      <p>{{ user.date_joined }}</p>
       <a href="mailto:">{{ user.email }}</a>
       <p><b>Administration: </b> <mark>{{ user.is_superuser }}</mark></p>
     </div>

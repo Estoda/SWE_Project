@@ -76,13 +76,17 @@ class RegisterView(APIView):
 
         payload = {
             "id": user.id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=360),
             "iat": datetime.datetime.utcnow(),
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
 
         response = redirect("home")
         response.set_cookie(key="jwt", value=token, httponly=True)
+
+        cart = models.Cart.objects.create(user=user)
+        order = models.Order.objects.create(user=user, cart=cart)
+
         return response
 
 
@@ -102,11 +106,6 @@ class LoginView(APIView):
                 "Shop/login.html",
                 {"error_message": "Please enter both username and password"},
             )
-        # superuser = authenticate(request, username=username, password=password)
-        # if superuser:
-        #     user = superuser
-        #     login(request, user)
-        #     return redirect("home")
 
         user = models.User.objects.filter(username=username).first()
         if user is None:
@@ -121,7 +120,7 @@ class LoginView(APIView):
 
         payload = {
             "id": user.id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=360),
             "iat": datetime.datetime.utcnow(),
         }
 
@@ -357,10 +356,21 @@ class CheckoutView(viewsets.ViewSet):
         if not user:
             return redirect("login")
 
-        cart, _ = models.Cart.objects.get_or_create(user=user)
-        order, _ = models.Order.objects.get_or_create(user=user)
-        order.cart = cart
-        order.total_amount = cart.get_total()
+        cart, created = models.Cart.objects.get_or_create(user=user)
+
+        # Ensure the cart exists before creating an order
+        if not cart.items.exists():
+            return render(
+                request,
+                "Shop/checkout.html",
+                {"error_message": "Your cart is empty!"},
+            )
+
+        # Check if an order already exists and ensure it's linked to the cart
+        order, created = models.Order.objects.get_or_create(user=user, cart=cart)
+        if created or order.cart is None:
+            order.total_amount = cart.get_total()
+            order.save()
 
         form = PaymentForm()
 

@@ -27,13 +27,13 @@
         <ul>
           {% if username %}
           <li>
-            <a href="{% url 'logout' %}">Logout</a>
-          </li>
-          <li>
             <a href="{% url 'products' %}">Products</a>
           </li>
           <li>
             <a href="{% url 'cart_detail' %}">My Cart</a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}">Logout</a>
           </li>
           {% else %}
           <li>
